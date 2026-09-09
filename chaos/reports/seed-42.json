@@ -1,0 +1,100 @@
+[
+  {
+    "config": {
+      "mode": "naive",
+      "workers": 6,
+      "jobs": 200,
+      "kill_probability": 0.3,
+      "kill_timing": "random",
+      "duration": 120.0,
+      "seed": 42,
+      "visibility_timeout": 2.0,
+      "reaper_interval": 0.25,
+      "max_sleep": 0.3,
+      "fail_probability": 0.05,
+      "overrun_probability": 0.03,
+      "max_attempts": 8,
+      "restart_delay": 0.1,
+      "heartbeat": false,
+      "log_dir": null,
+      "dsn": null
+    },
+    "run_id": "naive-42-20260907T075805",
+    "seed": 42,
+    "ok": true,
+    "wall_seconds": 25.260021924972534,
+    "stats": {
+      "enqueued": 200,
+      "succeeded": 193,
+      "dead": 7,
+      "expected_dead": 7,
+      "not_terminal": 0,
+      "executions": 355,
+      "reached_effect": 241,
+      "kills": 111,
+      "kills_by_phase": {
+        "started": 66,
+        "effect_done": 45
+      },
+      "misses": 0,
+      "restarts": 111,
+      "reaps": 112,
+      "duplicate_executions": 48,
+      "jobs_with_duplicate_executions": 39,
+      "duplicate_effects": 48,
+      "jobs_with_duplicate_effects": 39
+    },
+    "violations": [],
+    "timelines": {},
+    "log_dir": "/tmp/conveyor-chaos-naive-42-20260907T075805-r6is47do"
+  },
+  {
+    "config": {
+      "mode": "idempotent",
+      "workers": 6,
+      "jobs": 200,
+      "kill_probability": 0.3,
+      "kill_timing": "random",
+      "duration": 120.0,
+      "seed": 42,
+      "visibility_timeout": 2.0,
+      "reaper_interval": 0.25,
+      "max_sleep": 0.3,
+      "fail_probability": 0.05,
+      "overrun_probability": 0.03,
+      "max_attempts": 8,
+      "restart_delay": 0.1,
+      "heartbeat": false,
+      "log_dir": null,
+      "dsn": null
+    },
+    "run_id": "idempotent-42-20260907T075831",
+    "seed": 42,
+    "ok": true,
+    "wall_seconds": 24.16675090789795,
+    "stats": {
+      "enqueued": 200,
+      "succeeded": 193,
+      "dead": 7,
+      "expected_dead": 7,
+      "not_terminal": 0,
+      "executions": 319,
+      "reached_effect": 229,
+      "kills": 78,
+      "kills_by_phase": {
+        "effect_done": 32,
+        "started": 46
+      },
+      "misses": 3,
+      "restarts": 78,
+      "reaps": 79,
+      "duplicate_executions": 36,
+      "jobs_with_duplicate_executions": 29,
+      "duplicate_effects": 0,
+      "jobs_with_duplicate_effects": 0
+    },
+    "violations": [],
+    "timelines": {},
+    "log_dir": "/tmp/conveyor-chaos-idempotent-42-20260907T075831-ensolbte"
+  }
+]

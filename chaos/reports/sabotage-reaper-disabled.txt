@@ -1,0 +1,134 @@
+# SABOTAGE EVIDENCE: conveyor/reaper.py never requeues expired leases. Expected: [not_terminal] after --duration 25. Source restored after the run.
+run naive-42-20260907T080000  mode=naive  seed=42  workers=4  kill_timing=random  kill_probability=0.3
+  jobs enqueued          60
+  completed (succeeded)  41
+  dead                   1  (expected to fail: 1)
+  not terminal           18
+  executions             67  (reached effect: 53)
+  total kills            22  (by phase seen: {'started': 10, 'effect_done': 12}; misses: 0)
+  worker restarts        22
+  leases reaped          0
+  duplicate executions   0  (jobs whose effect phase ran more than once: 0)
+  duplicate effects      0  (jobs with more than one effect row: 0)
+  wall-clock             25.2s
+  worker logs            /tmp/conveyor-chaos-naive-42-20260907T080000-szqb6i_1
+
+FAILED: 19 violation(s)
+Times are seconds since run start. Rows carry DB clock_timestamp(); kills carry the host clock (same kernel under Compose).
+
+* [not_terminal] job 523: status=running attempts=1 (run duration exceeded)
+    T+   0.089s  attempt 1 started by w3.1 pid=140110
+    T+   0.312s  EFFECT row written by attempt 1 (w3.1)
+    T+   0.312s  attempt 1 committed effect phase (inserted)
+    T+   0.332s  SIGKILL w3.1 pid=140110 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w3.1 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 1, "pre": 0.221, "post": 0.203, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 524: status=running attempts=1 (run duration exceeded)
+    T+   0.089s  attempt 1 started by w2.1 pid=140108
+    T+   0.127s  SIGKILL w2.1 pid=140108 during attempt 1 (timing=random, phase seen=started)
+    final row: status=running attempts=1/8 claimed_by=w2.1 effects=0 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 2, "pre": 0.127, "post": 0.009, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 526: status=running attempts=1 (run duration exceeded)
+    T+   0.165s  attempt 1 started by w1.1 pid=140106
+    T+   0.233s  EFFECT row written by attempt 1 (w1.1)
+    T+   0.233s  attempt 1 committed effect phase (inserted)
+    T+   1.551s  SIGKILL w1.1 pid=140106 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w1.1 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 4, "pre": 0.066, "post": 0.177, "fail": false, "overrun": true, "overrun_post": 2.5}
+
+* [not_terminal] job 528: status=running attempts=1 (run duration exceeded)
+    T+   0.314s  attempt 1 started by w2.2 pid=140123
+    T+   0.559s  SIGKILL w2.2 pid=140123 during attempt 1 (timing=random, phase seen=started)
+    final row: status=running attempts=1/8 claimed_by=w2.2 effects=0 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 6, "pre": 0.287, "post": 0.101, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 533: status=running attempts=1 (run duration exceeded)
+    T+   1.198s  attempt 1 started by w0.1 pid=140104
+    T+   1.224s  EFFECT row written by attempt 1 (w0.1)
+    T+   1.224s  attempt 1 committed effect phase (inserted)
+    T+   1.233s  SIGKILL w0.1 pid=140104 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w0.1 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 11, "pre": 0.024, "post": 0.07, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 535: status=running attempts=1 (run duration exceeded)
+    T+   1.212s  attempt 1 started by w2.3 pid=140132
+    T+   1.295s  EFFECT row written by attempt 1 (w2.3)
+    T+   1.295s  attempt 1 committed effect phase (inserted)
+    T+   1.414s  SIGKILL w2.3 pid=140132 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w2.3 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 13, "pre": 0.08, "post": 0.281, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 537: status=running attempts=1 (run duration exceeded)
+    T+   1.507s  attempt 1 started by w3.2 pid=140128
+    T+   1.566s  SIGKILL w3.2 pid=140128 during attempt 1 (timing=random, phase seen=started)
+    final row: status=running attempts=1/8 claimed_by=w3.2 effects=0 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 15, "pre": 0.297, "post": 0.192, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 539: status=running attempts=1 (run duration exceeded)
+    T+   1.698s  attempt 1 started by w0.2 pid=140138
+    T+   1.795s  EFFECT row written by attempt 1 (w0.2)
+    T+   1.795s  attempt 1 committed effect phase (inserted)
+    T+   1.816s  SIGKILL w0.2 pid=140138 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w0.2 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 17, "pre": 0.095, "post": 0.08, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 542: status=running attempts=1 (run duration exceeded)
+    T+   2.004s  attempt 1 started by w0.3 pid=140176
+    T+   2.110s  SIGKILL w0.3 pid=140176 during attempt 1 (timing=random, phase seen=started)
+    final row: status=running attempts=1/8 claimed_by=w0.3 effects=0 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 20, "pre": 0.168, "post": 0.079, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 547: status=running attempts=1 (run duration exceeded)
+    T+   2.289s  attempt 1 started by w2.4 pid=140162
+    T+   2.294s  EFFECT row written by attempt 1 (w2.4)
+    T+   2.294s  attempt 1 committed effect phase (inserted)
+    T+   2.376s  SIGKILL w2.4 pid=140162 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w2.4 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 25, "pre": 0.003, "post": 0.216, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 552: status=running attempts=1 (run duration exceeded)
+    T+   2.645s  attempt 1 started by w3.3 pid=140169
+    T+   2.875s  EFFECT row written by attempt 1 (w3.3)
+    T+   2.875s  attempt 1 committed effect phase (inserted)
+    T+   2.932s  SIGKILL w3.3 pid=140169 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w3.3 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 30, "pre": 0.229, "post": 0.162, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 555: status=running attempts=1 (run duration exceeded)
+    T+   2.868s  attempt 1 started by w0.4 pid=140181
+    T+   2.886s  EFFECT row written by attempt 1 (w0.4)
+    T+   2.887s  attempt 1 committed effect phase (inserted)
+    T+   2.952s  SIGKILL w0.4 pid=140181 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w0.4 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 33, "pre": 0.017, "post": 0.263, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 557: status=running attempts=1 (run duration exceeded)
+    T+   3.120s  attempt 1 started by w3.4 pid=140229
+    T+   3.160s  EFFECT row written by attempt 1 (w3.4)
+    T+   3.161s  attempt 1 committed effect phase (inserted)
+    T+   3.176s  SIGKILL w3.4 pid=140229 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w3.4 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 35, "pre": 0.039, "post": 0.143, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 560: status=running attempts=1 (run duration exceeded)
+    T+   3.331s  attempt 1 started by w2.5 pid=140187
+    T+   3.498s  SIGKILL w2.5 pid=140187 during attempt 1 (timing=random, phase seen=started)
+    final row: status=running attempts=1/8 claimed_by=w2.5 effects=0 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 38, "pre": 0.195, "post": 0.131, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 563: status=running attempts=1 (run duration exceeded)
+    T+   3.520s  attempt 1 started by w0.5 pid=140233
+    T+   3.793s  EFFECT row written by attempt 1 (w0.5)
+    T+   3.793s  attempt 1 committed effect phase (inserted)
+    T+   4.022s  SIGKILL w0.5 pid=140233 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w0.5 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 41, "pre": 0.272, "post": 0.258, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 567: status=running attempts=1 (run duration exceeded)
+    T+   3.784s  attempt 1 started by w2.6 pid=140246
+    T+   3.926s  EFFECT row written by attempt 1 (w2.6)
+    T+   3.926s  attempt 1 committed effect phase (inserted)
+    T+   3.951s  SIGKILL w2.6 pid=140246 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w2.6 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 45, "pre": 0.14, "post": 0.219, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 572: status=running attempts=1 (run duration exceeded)
+    T+   4.122s  attempt 1 started by w1.2 pid=140167
+    T+   4.374s  EFFECT row written by attempt 1 (w1.2)
+    T+   4.374s  attempt 1 committed effect phase (inserted)
+    T+   4.476s  SIGKILL w1.2 pid=140167 during attempt 1 (timing=random, phase seen=effect_done)
+    final row: status=running attempts=1/8 claimed_by=w1.2 effects=1 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 50, "pre": 0.251, "post": 0.291, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [not_terminal] job 576: status=running attempts=1 (run duration exceeded)
+    T+   4.349s  attempt 1 started by w0.6 pid=140255
+    T+   4.489s  SIGKILL w0.6 pid=140255 during attempt 1 (timing=random, phase seen=started)
+    final row: status=running attempts=1/8 claimed_by=w0.6 effects=0 executions=1 plan={"run_id": "naive-42-20260907T080000", "i": 54, "pre": 0.299, "post": 0.167, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [window_not_exercised] naive handler shows zero duplicate effects: the failure window was never hit, so an idempotent pass would prove nothing
+

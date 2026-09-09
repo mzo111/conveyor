@@ -1,0 +1,32 @@
+run naive-42-20260907T075805  mode=naive  seed=42  workers=6  kill_timing=random  kill_probability=0.3
+  jobs enqueued          200
+  completed (succeeded)  193
+  dead                   7  (expected to fail: 7)
+  not terminal           0
+  executions             355  (reached effect: 241)
+  total kills            111  (by phase seen: {'started': 66, 'effect_done': 45}; misses: 0)
+  worker restarts        111
+  leases reaped          112
+  duplicate executions   48  (jobs whose effect phase ran more than once: 39)
+  duplicate effects      48  (jobs with more than one effect row: 39)
+  wall-clock             25.3s
+  worker logs            /tmp/conveyor-chaos-naive-42-20260907T075805-r6is47do
+
+OK: all assertions held
+
+run idempotent-42-20260907T075831  mode=idempotent  seed=42  workers=6  kill_timing=random  kill_probability=0.3
+  jobs enqueued          200
+  completed (succeeded)  193
+  dead                   7  (expected to fail: 7)
+  not terminal           0
+  executions             319  (reached effect: 229)
+  total kills            78  (by phase seen: {'effect_done': 32, 'started': 46}; misses: 3)
+  worker restarts        78
+  leases reaped          79
+  duplicate executions   36  (jobs whose effect phase ran more than once: 29)
+  duplicate effects      0  (jobs with more than one effect row: 0)
+  wall-clock             24.2s
+  worker logs            /tmp/conveyor-chaos-idempotent-42-20260907T075831-ensolbte
+
+OK: all assertions held
+

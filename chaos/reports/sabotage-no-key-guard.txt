@@ -1,0 +1,145 @@
+# SABOTAGE EVIDENCE: chaos/handlers.py idempotent key guard disabled (if idempotent -> if False). Expected: [duplicate]. Source restored after the run.
+run idempotent-42-20260907T075943  mode=idempotent  seed=42  workers=4  kill_timing=random  kill_probability=0.3
+  jobs enqueued          60
+  completed (succeeded)  59
+  dead                   1  (expected to fail: 1)
+  not terminal           0
+  executions             90  (reached effect: 70)
+  total kills            23  (by phase seen: {'started': 13, 'effect_done': 10}; misses: 1)
+  worker restarts        23
+  leases reaped          23
+  duplicate executions   11  (jobs whose effect phase ran more than once: 9)
+  duplicate effects      11  (jobs with more than one effect row: 9)
+  wall-clock             11.1s
+  worker logs            /tmp/conveyor-chaos-idempotent-42-20260907T075943-6nmmpfoj
+
+FAILED: 9 violation(s)
+Times are seconds since run start. Rows carry DB clock_timestamp(); kills carry the host clock (same kernel under Compose).
+
+* [duplicate] job 406: idempotent handler left 2 effect rows
+    T+   0.174s  attempt 1 started by w0.1 pid=139527
+    T+   0.241s  EFFECT row written by attempt 1 (w0.1)
+    T+   0.241s  attempt 1 committed effect phase (inserted)
+    T+   2.263s  REAPED attempt 1 -> queued
+    T+   2.387s  attempt 2 started by w2.4 pid=139609
+    T+   2.455s  EFFECT row written by attempt 2 (w2.4)
+    T+   2.455s  attempt 2 committed effect phase (inserted)
+    T+   2.634s  attempt 2 handler finished (ack follows)
+    T+   2.635s  job succeeded at attempt 2 (last_error='visibility deadline expired')
+    T+   2.743s  attempt 1 handler finished (ack follows)
+    final row: status=succeeded attempts=2/8 claimed_by=w2.4 effects=2 executions=2 plan={"run_id": "idempotent-42-20260907T075943", "i": 4, "pre": 0.066, "post": 0.177, "fail": false, "overrun": true, "overrun_post": 2.5}
+
+* [duplicate] job 407: idempotent handler left 2 effect rows
+    T+   0.299s  attempt 1 started by w2.2 pid=139545
+    T+   0.543s  EFFECT row written by attempt 1 (w2.2)
+    T+   0.543s  attempt 1 committed effect phase (inserted)
+    T+   0.600s  SIGKILL w2.2 pid=139545 during attempt 1 (timing=random, phase seen=effect_done)
+    T+   2.514s  REAPED attempt 1 -> queued
+    T+   2.638s  attempt 2 started by w2.4 pid=139609
+    T+   2.882s  EFFECT row written by attempt 2 (w2.4)
+    T+   2.882s  attempt 2 committed effect phase (inserted)
+    T+   3.093s  attempt 2 handler finished (ack follows)
+    T+   3.094s  job succeeded at attempt 2 (last_error='visibility deadline expired')
+    final row: status=succeeded attempts=2/8 claimed_by=w2.4 effects=2 executions=2 plan={"run_id": "idempotent-42-20260907T075943", "i": 5, "pre": 0.242, "post": 0.209, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [duplicate] job 413: idempotent handler left 2 effect rows
+    T+   1.204s  attempt 1 started by w3.2 pid=139589
+    T+   1.230s  EFFECT row written by attempt 1 (w3.2)
+    T+   1.230s  attempt 1 committed effect phase (inserted)
+    T+   1.260s  SIGKILL w3.2 pid=139589 during attempt 1 (timing=random, phase seen=effect_done)
+    T+   3.267s  REAPED attempt 1 -> queued
+    T+   3.330s  attempt 2 started by w1.2 pid=139615
+    T+   3.356s  EFFECT row written by attempt 2 (w1.2)
+    T+   3.356s  attempt 2 committed effect phase (inserted)
+    T+   3.427s  attempt 2 handler finished (ack follows)
+    T+   3.428s  job succeeded at attempt 2 (last_error='visibility deadline expired')
+    final row: status=succeeded attempts=2/8 claimed_by=w1.2 effects=2 executions=2 plan={"run_id": "idempotent-42-20260907T075943", "i": 11, "pre": 0.024, "post": 0.07, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [duplicate] job 416: idempotent handler left 3 effect rows
+    T+   1.451s  attempt 1 started by w3.3 pid=139599
+    T+   1.504s  EFFECT row written by attempt 1 (w3.3)
+    T+   1.505s  attempt 1 committed effect phase (inserted)
+    T+   1.628s  SIGKILL w3.3 pid=139599 during attempt 1 (timing=random, phase seen=effect_done)
+    T+   3.519s  REAPED attempt 1 -> queued
+    T+   3.526s  attempt 2 started by w2.4 pid=139609
+    T+   3.579s  EFFECT row written by attempt 2 (w2.4)
+    T+   3.580s  attempt 2 committed effect phase (inserted)
+    T+   3.616s  SIGKILL w2.4 pid=139609 during attempt 2 (timing=random, phase seen=effect_done)
+    T+   5.530s  REAPED attempt 2 -> queued
+    T+   5.717s  attempt 3 started by w2.5 pid=139630
+    T+   5.769s  EFFECT row written by attempt 3 (w2.5)
+    T+   5.770s  attempt 3 committed effect phase (inserted)
+    T+   5.990s  attempt 3 handler finished (ack follows)
+    T+   5.991s  job succeeded at attempt 3 (last_error='visibility deadline expired')
+    final row: status=succeeded attempts=3/8 claimed_by=w2.5 effects=3 executions=3 plan={"run_id": "idempotent-42-20260907T075943", "i": 14, "pre": 0.051, "post": 0.219, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [duplicate] job 418: idempotent handler left 2 effect rows
+    T+   1.604s  attempt 1 started by w2.3 pid=139591
+    T+   1.858s  EFFECT row written by attempt 1 (w2.3)
+    T+   1.859s  attempt 1 committed effect phase (inserted)
+    T+   1.942s  SIGKILL w2.3 pid=139591 during attempt 1 (timing=random, phase seen=effect_done)
+    T+   3.771s  REAPED attempt 1 -> queued
+    T+   3.810s  attempt 2 started by w2.5 pid=139630
+    T+   4.065s  EFFECT row written by attempt 2 (w2.5)
+    T+   4.065s  attempt 2 committed effect phase (inserted)
+    T+   4.300s  attempt 2 handler finished (ack follows)
+    T+   4.301s  job succeeded at attempt 2 (last_error='visibility deadline expired')
+    final row: status=succeeded attempts=2/8 claimed_by=w2.5 effects=2 executions=2 plan={"run_id": "idempotent-42-20260907T075943", "i": 16, "pre": 0.253, "post": 0.233, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [duplicate] job 424: idempotent handler left 2 effect rows
+    T+   2.512s  attempt 1 started by w3.4 pid=139605
+    T+   2.540s  EFFECT row written by attempt 1 (w3.4)
+    T+   2.540s  attempt 1 committed effect phase (inserted)
+    T+   2.542s  SIGKILL w3.4 pid=139605 during attempt 1 (timing=random, phase seen=effect_done)
+    T+   4.525s  REAPED attempt 1 -> queued
+    T+   4.731s  attempt 2 started by w3.7 pid=139652
+    T+   4.759s  EFFECT row written by attempt 2 (w3.7)
+    T+   4.759s  attempt 2 committed effect phase (inserted)
+    T+   4.775s  attempt 2 handler finished (ack follows)
+    T+   4.776s  job succeeded at attempt 2 (last_error='visibility deadline expired')
+    final row: status=succeeded attempts=2/8 claimed_by=w3.7 effects=2 executions=2 plan={"run_id": "idempotent-42-20260907T075943", "i": 22, "pre": 0.027, "post": 0.014, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [duplicate] job 435: idempotent handler left 3 effect rows
+    T+   3.521s  attempt 1 started by w3.6 pid=139624
+    T+   3.539s  EFFECT row written by attempt 1 (w3.6)
+    T+   3.540s  attempt 1 committed effect phase (inserted)
+    T+   3.748s  SIGKILL w3.6 pid=139624 during attempt 1 (timing=random, phase seen=effect_done)
+    T+   5.530s  REAPED attempt 1 -> queued
+    T+   5.763s  attempt 2 started by w1.5 pid=139680
+    T+   5.782s  EFFECT row written by attempt 2 (w1.5)
+    T+   5.782s  attempt 2 committed effect phase (inserted)
+    T+   5.798s  SIGKILL w1.5 pid=139680 during attempt 2 (timing=random, phase seen=effect_done)
+    T+   7.791s  REAPED attempt 2 -> queued
+    T+   7.804s  attempt 3 started by w3.11 pid=139750
+    T+   7.823s  EFFECT row written by attempt 3 (w3.11)
+    T+   7.824s  attempt 3 committed effect phase (inserted)
+    T+   8.089s  attempt 3 handler finished (ack follows)
+    T+   8.090s  job succeeded at attempt 3 (last_error='visibility deadline expired')
+    final row: status=succeeded attempts=3/8 claimed_by=w3.11 effects=3 executions=3 plan={"run_id": "idempotent-42-20260907T075943", "i": 33, "pre": 0.017, "post": 0.263, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [duplicate] job 439: idempotent handler left 2 effect rows
+    T+   3.998s  attempt 1 started by w0.1 pid=139527
+    T+   4.218s  EFFECT row written by attempt 1 (w0.1)
+    T+   4.218s  attempt 1 committed effect phase (inserted)
+    T+   4.235s  SIGKILL w0.1 pid=139527 during attempt 1 (timing=random, phase seen=effect_done)
+    T+   6.032s  REAPED attempt 1 -> queued
+    T+   6.230s  attempt 2 started by w1.6 pid=139731
+    T+   6.451s  EFFECT row written by attempt 2 (w1.6)
+    T+   6.451s  attempt 2 committed effect phase (inserted)
+    T+   6.513s  attempt 2 handler finished (ack follows)
+    T+   6.514s  job succeeded at attempt 2 (last_error='visibility deadline expired')
+    final row: status=succeeded attempts=2/8 claimed_by=w1.6 effects=2 executions=2 plan={"run_id": "idempotent-42-20260907T075943", "i": 37, "pre": 0.219, "post": 0.06, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [duplicate] job 442: idempotent handler left 2 effect rows
+    T+   4.341s  attempt 1 started by w1.3 pid=139660
+    T+   4.408s  EFFECT row written by attempt 1 (w1.3)
+    T+   4.409s  attempt 1 committed effect phase (inserted)
+    T+   4.413s  SIGKILL w1.3 pid=139660 during attempt 1 (timing=random, phase seen=effect_done)
+    T+   6.535s  REAPED attempt 1 -> queued
+    T+   6.548s  attempt 2 started by w3.9 pid=139735
+    T+   6.615s  EFFECT row written by attempt 2 (w3.9)
+    T+   6.616s  attempt 2 committed effect phase (inserted)
+    T+   6.639s  attempt 2 handler finished (ack follows)
+    T+   6.640s  job succeeded at attempt 2 (last_error='visibility deadline expired')
+    final row: status=succeeded attempts=2/8 claimed_by=w3.9 effects=2 executions=2 plan={"run_id": "idempotent-42-20260907T075943", "i": 40, "pre": 0.066, "post": 0.021, "fail": false, "overrun": false, "overrun_post": 2.5}
+

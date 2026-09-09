@@ -1,0 +1,73 @@
+# SABOTAGE EVIDENCE: conveyor/worker.py acked before running the handler (at-most-once). Expected: [lost]. Source restored after the run.
+run idempotent-42-20260907T075954  mode=idempotent  seed=42  workers=4  kill_timing=random  kill_probability=0.3
+  jobs enqueued          60
+  completed (succeeded)  60
+  dead                   0  (expected to fail: 1)
+  not terminal           0
+  executions             60  (reached effect: 51)
+  total kills            19  (by phase seen: {'started': 8, 'effect_done': 11}; misses: 0)
+  worker restarts        19
+  leases reaped          0
+  duplicate executions   0  (jobs whose effect phase ran more than once: 0)
+  duplicate effects      0  (jobs with more than one effect row: 0)
+  wall-clock             5.6s
+  worker logs            /tmp/conveyor-chaos-idempotent-42-20260907T075954-ux5fgkk3
+
+FAILED: 10 violation(s)
+Times are seconds since run start. Rows carry DB clock_timestamp(); kills carry the host clock (same kernel under Compose).
+
+* [lost] job 468: status=succeeded but zero effect rows
+    T+   0.301s  job succeeded at attempt 1 (last_error=None)
+    T+   0.302s  attempt 1 started by w0.1 pid=139876
+    T+   0.589s  SIGKILL w0.1 pid=139876 during attempt 1 (timing=random, phase seen=started)
+    final row: status=succeeded attempts=1/8 claimed_by=w0.1 effects=0 executions=1 plan={"run_id": "idempotent-42-20260907T075954", "i": 6, "pre": 0.287, "post": 0.101, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [lost] job 470: status=succeeded but zero effect rows
+    T+   0.776s  job succeeded at attempt 1 (last_error=None)
+    T+   0.782s  attempt 1 started by w0.2 pid=139896
+    T+   0.939s  SIGKILL w0.2 pid=139896 during attempt 1 (timing=random, phase seen=started)
+    final row: status=succeeded attempts=1/8 claimed_by=w0.2 effects=0 executions=1 plan={"run_id": "idempotent-42-20260907T075954", "i": 8, "pre": 0.161, "post": 0.292, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [lost] job 471: status=succeeded but zero effect rows
+    T+   0.872s  job succeeded at attempt 1 (last_error=None)
+    T+   0.878s  attempt 1 started by w2.2 pid=139899
+    T+   1.128s  SIGKILL w2.2 pid=139899 during attempt 1 (timing=random, phase seen=started)
+    final row: status=succeeded attempts=1/8 claimed_by=w2.2 effects=0 executions=1 plan={"run_id": "idempotent-42-20260907T075954", "i": 9, "pre": 0.249, "post": 0.186, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [lost] job 479: status=succeeded but zero effect rows
+    T+   1.678s  job succeeded at attempt 1 (last_error=None)
+    T+   1.683s  attempt 1 started by w2.4 pid=139919
+    T+   1.711s  SIGKILL w2.4 pid=139919 during attempt 1 (timing=random, phase seen=started)
+    final row: status=succeeded attempts=1/8 claimed_by=w2.4 effects=0 executions=1 plan={"run_id": "idempotent-42-20260907T075954", "i": 17, "pre": 0.095, "post": 0.08, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [lost] job 481: status=succeeded but zero effect rows
+    T+   2.014s  job succeeded at attempt 1 (last_error=None)
+    T+   2.015s  attempt 1 started by w1.2 pid=139906
+    T+   2.144s  SIGKILL w1.2 pid=139906 during attempt 1 (timing=random, phase seen=started)
+    final row: status=succeeded attempts=1/8 claimed_by=w1.2 effects=0 executions=1 plan={"run_id": "idempotent-42-20260907T075954", "i": 19, "pre": 0.274, "post": 0.138, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [lost] job 482: status=succeeded but zero effect rows
+    T+   2.097s  job succeeded at attempt 1 (last_error=None)
+    T+   2.099s  attempt 1 started by w0.3 pid=139910
+    T+   2.154s  SIGKILL w0.3 pid=139910 during attempt 1 (timing=random, phase seen=started)
+    final row: status=succeeded attempts=1/8 claimed_by=w0.3 effects=0 executions=1 plan={"run_id": "idempotent-42-20260907T075954", "i": 20, "pre": 0.168, "post": 0.079, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [expected_dead_wrong] job 493: configured to fail but status=succeeded
+    T+   3.066s  job succeeded at attempt 1 (last_error=None)
+    T+   3.071s  attempt 1 started by w0.5 pid=139964
+    final row: status=succeeded attempts=1/8 claimed_by=w0.5 effects=0 executions=1 plan={"run_id": "idempotent-42-20260907T075954", "i": 31, "pre": 0.0, "post": 0.097, "fail": true, "overrun": false, "overrun_post": 2.5}
+
+* [lost] job 504: status=succeeded but zero effect rows
+    T+   3.930s  job succeeded at attempt 1 (last_error=None)
+    T+   3.931s  attempt 1 started by w1.3 pid=139930
+    T+   4.074s  SIGKILL w1.3 pid=139930 during attempt 1 (timing=random, phase seen=started)
+    final row: status=succeeded attempts=1/8 claimed_by=w1.3 effects=0 executions=1 plan={"run_id": "idempotent-42-20260907T075954", "i": 42, "pre": 0.201, "post": 0.064, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [lost] job 516: status=succeeded but zero effect rows
+    T+   4.727s  job succeeded at attempt 1 (last_error=None)
+    T+   4.729s  attempt 1 started by w3.3 pid=139978
+    T+   4.869s  SIGKILL w3.3 pid=139978 during attempt 1 (timing=random, phase seen=started)
+    final row: status=succeeded attempts=1/8 claimed_by=w3.3 effects=0 executions=1 plan={"run_id": "idempotent-42-20260907T075954", "i": 54, "pre": 0.299, "post": 0.167, "fail": false, "overrun": false, "overrun_post": 2.5}
+
+* [window_not_exercised] no job reached the effect phase twice: the failure window was never hit
+
