@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Packaging artifacts from `python -m build` / `pip install .`
+build/
+dist/
+*.egg-info/

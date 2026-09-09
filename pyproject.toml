@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conveyor-client"
+version = "0.1.0"
+description = "Client SDK for the Conveyor Postgres job queue: enqueue, get, cancel."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "psycopg[binary]>=3.1,<4",
+    "psycopg-pool>=3.2,<4",
+]
+# license is intentionally unset: this repository has no LICENSE file yet, and
+# asserting one here would be a claim nobody made. Fill it in before publishing.
+classifiers = [
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Database",
+    "Typing :: Typed",
+]
+
+# Only the SDK ships. conveyor/, bench/ and chaos/ are a service you deploy from
+# source, not something anyone pip-installs, and keeping them out of the wheel is
+# what makes "do not depend on the internals" checkable rather than aspirational.
+[tool.setuptools]
+packages = ["conveyor_client"]
+
+[tool.setuptools.package-data]
+conveyor_client = ["py.typed"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+# tests/ covers the queue internals; tests_client/ covers the SDK and imports
+# nothing from conveyor/. They are separate directories so the SDK's tests cannot
+# quietly inherit tests/conftest.py, which does import conveyor.db.
+testpaths = ["tests", "tests_client"]
+pythonpath = ["."]
