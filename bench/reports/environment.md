@@ -13,7 +13,7 @@ Collected automatically by `bench/env.py` during the run. Not hand-written.
 | Platform | Linux-5.15.133.1-microsoft-standard-WSL2-x86_64-with-glibc2.39 |
 | Docker | Docker version 29.2.1, build a5c7197 |
 | Docker storage driver | overlayfs |
-| Root disk | 1006.9 GiB total, 943.7 GiB free |
+| Root disk | 1006.9 GiB total, 926.0 GiB free |
 | Python | 3.12.3 |
 | psycopg | 3.3.5 |
 

@@ -1,0 +1,225 @@
+{
+  "started_at": "20260910T040144Z",
+  "dsn_host": "localhost:5433/conveyor",
+  "environment": {
+    "host": {
+      "cpu_model": "13th Gen Intel(R) Core(TM) i7-13700KF",
+      "cpu_logical_cores": 24,
+      "memory_gib": 15.5,
+      "kernel": "5.15.133.1-microsoft-standard-WSL2",
+      "is_wsl": true,
+      "platform": "Linux-5.15.133.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "root_disk_total_gib": 1006.9,
+      "root_disk_free_gib": 926.0,
+      "docker_version": "Docker version 29.2.1, build a5c7197",
+      "docker_storage_driver": "overlayfs",
+      "docker_host_os": "Ubuntu 24.04.1 LTS",
+      "python": "3.12.3",
+      "psycopg": "3.3.5"
+    },
+    "postgres": {
+      "version": "PostgreSQL 16.15 (Debian 16.15-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+      "non_default_settings": [
+        {
+          "name": "DateStyle",
+          "setting": "ISO, MDY",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "default_text_search_config",
+          "setting": "pg_catalog.english",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "dynamic_shared_memory_type",
+          "setting": "posix",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "lc_messages",
+          "setting": "en_US.utf8",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "lc_monetary",
+          "setting": "en_US.utf8",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "lc_numeric",
+          "setting": "en_US.utf8",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "lc_time",
+          "setting": "en_US.utf8",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "listen_addresses",
+          "setting": "*",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "log_timezone",
+          "setting": "Etc/UTC",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "max_connections",
+          "setting": "100",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "max_wal_size",
+          "setting": "1024",
+          "unit": "MB",
+          "source": "configuration file"
+        },
+        {
+          "name": "min_wal_size",
+          "setting": "80",
+          "unit": "MB",
+          "source": "configuration file"
+        },
+        {
+          "name": "shared_buffers",
+          "setting": "16384",
+          "unit": "8kB",
+          "source": "configuration file"
+        },
+        {
+          "name": "TimeZone",
+          "setting": "Etc/UTC",
+          "unit": null,
+          "source": "configuration file"
+        }
+      ],
+      "key_settings": [
+        {
+          "name": "autovacuum",
+          "setting": "on",
+          "unit": null
+        },
+        {
+          "name": "checkpoint_timeout",
+          "setting": "300",
+          "unit": "s"
+        },
+        {
+          "name": "commit_delay",
+          "setting": "0",
+          "unit": null
+        },
+        {
+          "name": "effective_cache_size",
+          "setting": "524288",
+          "unit": "8kB"
+        },
+        {
+          "name": "fsync",
+          "setting": "on",
+          "unit": null
+        },
+        {
+          "name": "full_page_writes",
+          "setting": "on",
+          "unit": null
+        },
+        {
+          "name": "max_connections",
+          "setting": "100",
+          "unit": null
+        },
+        {
+          "name": "max_wal_size",
+          "setting": "1024",
+          "unit": "MB"
+        },
+        {
+          "name": "random_page_cost",
+          "setting": "4",
+          "unit": null
+        },
+        {
+          "name": "shared_buffers",
+          "setting": "16384",
+          "unit": "8kB"
+        },
+        {
+          "name": "synchronous_commit",
+          "setting": "on",
+          "unit": null
+        },
+        {
+          "name": "track_io_timing",
+          "setting": "off",
+          "unit": null
+        },
+        {
+          "name": "wal_buffers",
+          "setting": "512",
+          "unit": "8kB"
+        },
+        {
+          "name": "wal_level",
+          "setting": "replica",
+          "unit": null
+        },
+        {
+          "name": "work_mem",
+          "setting": "4096",
+          "unit": "kB"
+        }
+      ]
+    },
+    "compose": "name: conveyor\n\nservices:\n  db:\n    image: postgres:16\n    restart: unless-stopped\n    environment:\n      POSTGRES_USER: conveyor\n      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-conveyor}\n      POSTGRES_DB: conveyor\n    ports:\n      # 5433 on the host: 5432 is commonly taken by another local Postgres.\n      - \"5433:5432\"\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U conveyor -d conveyor\"]\n      interval: 5s\n      timeout: 5s\n      retries: 20\n\nvolumes:\n  pgdata:\n"
+  },
+  "commit_probe": [
+    {
+      "concurrency": 1,
+      "seconds": 6.1,
+      "commits": 7334,
+      "commits_per_second": 1203.2,
+      "implied_job_ceiling_per_second": 601.6
+    },
+    {
+      "concurrency": 2,
+      "seconds": 6.1,
+      "commits": 11888,
+      "commits_per_second": 1949.2,
+      "implied_job_ceiling_per_second": 974.6
+    },
+    {
+      "concurrency": 4,
+      "seconds": 6.1,
+      "commits": 23402,
+      "commits_per_second": 3833.9,
+      "implied_job_ceiling_per_second": 1917.0
+    },
+    {
+      "concurrency": 8,
+      "seconds": 6.12,
+      "commits": 41700,
+      "commits_per_second": 6810.6,
+      "implied_job_ceiling_per_second": 3405.3
+    },
+    {
+      "concurrency": 16,
+      "seconds": 6.19,
+      "commits": 60120,
+      "commits_per_second": 9715.6,
+      "implied_job_ceiling_per_second": 4857.8
+    }
+  ]
+}

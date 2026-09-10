@@ -1,0 +1,1976 @@
+{
+  "started_at": "20260910T035732Z",
+  "dsn_host": "localhost:5433/conveyor",
+  "environment": {
+    "host": {
+      "cpu_model": "13th Gen Intel(R) Core(TM) i7-13700KF",
+      "cpu_logical_cores": 24,
+      "memory_gib": 15.5,
+      "kernel": "5.15.133.1-microsoft-standard-WSL2",
+      "is_wsl": true,
+      "platform": "Linux-5.15.133.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "root_disk_total_gib": 1006.9,
+      "root_disk_free_gib": 926.0,
+      "docker_version": "Docker version 29.2.1, build a5c7197",
+      "docker_storage_driver": "overlayfs",
+      "docker_host_os": "Ubuntu 24.04.1 LTS",
+      "python": "3.12.3",
+      "psycopg": "3.3.5"
+    },
+    "postgres": {
+      "version": "PostgreSQL 16.15 (Debian 16.15-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+      "non_default_settings": [
+        {
+          "name": "DateStyle",
+          "setting": "ISO, MDY",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "default_text_search_config",
+          "setting": "pg_catalog.english",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "dynamic_shared_memory_type",
+          "setting": "posix",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "lc_messages",
+          "setting": "en_US.utf8",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "lc_monetary",
+          "setting": "en_US.utf8",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "lc_numeric",
+          "setting": "en_US.utf8",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "lc_time",
+          "setting": "en_US.utf8",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "listen_addresses",
+          "setting": "*",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "log_timezone",
+          "setting": "Etc/UTC",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "max_connections",
+          "setting": "100",
+          "unit": null,
+          "source": "configuration file"
+        },
+        {
+          "name": "max_wal_size",
+          "setting": "1024",
+          "unit": "MB",
+          "source": "configuration file"
+        },
+        {
+          "name": "min_wal_size",
+          "setting": "80",
+          "unit": "MB",
+          "source": "configuration file"
+        },
+        {
+          "name": "shared_buffers",
+          "setting": "16384",
+          "unit": "8kB",
+          "source": "configuration file"
+        },
+        {
+          "name": "TimeZone",
+          "setting": "Etc/UTC",
+          "unit": null,
+          "source": "configuration file"
+        }
+      ],
+      "key_settings": [
+        {
+          "name": "autovacuum",
+          "setting": "on",
+          "unit": null
+        },
+        {
+          "name": "checkpoint_timeout",
+          "setting": "300",
+          "unit": "s"
+        },
+        {
+          "name": "commit_delay",
+          "setting": "0",
+          "unit": null
+        },
+        {
+          "name": "effective_cache_size",
+          "setting": "524288",
+          "unit": "8kB"
+        },
+        {
+          "name": "fsync",
+          "setting": "on",
+          "unit": null
+        },
+        {
+          "name": "full_page_writes",
+          "setting": "on",
+          "unit": null
+        },
+        {
+          "name": "max_connections",
+          "setting": "100",
+          "unit": null
+        },
+        {
+          "name": "max_wal_size",
+          "setting": "1024",
+          "unit": "MB"
+        },
+        {
+          "name": "random_page_cost",
+          "setting": "4",
+          "unit": null
+        },
+        {
+          "name": "shared_buffers",
+          "setting": "16384",
+          "unit": "8kB"
+        },
+        {
+          "name": "synchronous_commit",
+          "setting": "on",
+          "unit": null
+        },
+        {
+          "name": "track_io_timing",
+          "setting": "off",
+          "unit": null
+        },
+        {
+          "name": "wal_buffers",
+          "setting": "512",
+          "unit": "8kB"
+        },
+        {
+          "name": "wal_level",
+          "setting": "replica",
+          "unit": null
+        },
+        {
+          "name": "work_mem",
+          "setting": "4096",
+          "unit": "kB"
+        }
+      ]
+    },
+    "compose": "name: conveyor\n\nservices:\n  db:\n    image: postgres:16\n    restart: unless-stopped\n    environment:\n      POSTGRES_USER: conveyor\n      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-conveyor}\n      POSTGRES_DB: conveyor\n    ports:\n      # 5433 on the host: 5432 is commonly taken by another local Postgres.\n      - \"5433:5432\"\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U conveyor -d conveyor\"]\n      interval: 5s\n      timeout: 5s\n      retries: 20\n\nvolumes:\n  pgdata:\n"
+  },
+  "enqueue": {
+    "jobs": 3000,
+    "seconds": 2.909,
+    "enqueues_per_second": 1031.3,
+    "latency_ms": {
+      "p50": 0.889,
+      "p95": 1.305,
+      "p99": 2.001
+    },
+    "connections": 1
+  },
+  "sweep": [
+    {
+      "workers": 1,
+      "jobs_per_run": 6200,
+      "reps": 3,
+      "throughput_median": 608.8,
+      "throughput_min": 544.1,
+      "throughput_max": 619.8,
+      "runs": [
+        {
+          "config": {
+            "workers": 1,
+            "jobs_per_worker": 0,
+            "min_jobs": 6200,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w1-r0",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 6200,
+          "completed": 6200,
+          "wall_seconds": 11.474,
+          "interior_throughput": 608.8,
+          "wallclock_throughput": 540.3,
+          "interior_window_seconds": 8.147,
+          "interior_jobs": 4960,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 0.891,
+            "p95": 1.248,
+            "p99": 2.068
+          },
+          "ack_latency_ms": {
+            "p50": 0.817,
+            "p95": 1.156,
+            "p99": 1.904
+          },
+          "e2e_latency_ms": {
+            "p50": 5469.822,
+            "p95": 10576.067,
+            "p99": 11027.342
+          },
+          "worker_stats": {
+            "processed": 6200,
+            "empty_claims": 1,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 1983,
+            "active_backend_observations": 1270,
+            "wait_events": [
+              {
+                "event": "IO/WALSync",
+                "observations": 1077,
+                "share": 0.848
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 187,
+                "share": 0.1472
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 3,
+                "share": 0.0024
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 2,
+                "share": 0.0016
+              },
+              {
+                "event": "LWLock/ProcArray",
+                "observations": 1,
+                "share": 0.0008
+              }
+            ],
+            "backend_states": {
+              "idle": 2163,
+              "active": 1270,
+              "idle in transaction": 514
+            },
+            "ungranted_lock_observations": 0
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.0266,
+            "host_cpu_busy_cores_equivalent": 0.64,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 14605,
+            "xact_rollback": 0,
+            "tup_fetched": 20073,
+            "tup_updated": 12408,
+            "tup_inserted": 6200,
+            "blks_hit": 334517,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.36
+          },
+          "notes": []
+        },
+        {
+          "config": {
+            "workers": 1,
+            "jobs_per_worker": 0,
+            "min_jobs": 6200,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w1-r1",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 6200,
+          "completed": 6200,
+          "wall_seconds": 11.547,
+          "interior_throughput": 544.1,
+          "wallclock_throughput": 536.9,
+          "interior_window_seconds": 9.116,
+          "interior_jobs": 4960,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 0.893,
+            "p95": 1.244,
+            "p99": 1.808
+          },
+          "ack_latency_ms": {
+            "p50": 0.82,
+            "p95": 1.164,
+            "p99": 1.897
+          },
+          "e2e_latency_ms": {
+            "p50": 7060.85,
+            "p95": 12186.913,
+            "p99": 12644.237
+          },
+          "worker_stats": {
+            "processed": 6200,
+            "empty_claims": 1,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 1976,
+            "active_backend_observations": 1308,
+            "wait_events": [
+              {
+                "event": "IO/WALSync",
+                "observations": 1052,
+                "share": 0.8043
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 222,
+                "share": 0.1697
+              },
+              {
+                "event": "Timeout/VacuumTruncate",
+                "observations": 25,
+                "share": 0.0191
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 6,
+                "share": 0.0046
+              },
+              {
+                "event": "Timeout/VacuumDelay",
+                "observations": 2,
+                "share": 0.0015
+              },
+              {
+                "event": "Lock/relation",
+                "observations": 1,
+                "share": 0.0008
+              }
+            ],
+            "backend_states": {
+              "idle": 2153,
+              "active": 1308,
+              "idle in transaction": 506
+            },
+            "ungranted_lock_observations": 1
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.0266,
+            "host_cpu_busy_cores_equivalent": 0.64,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 14613,
+            "xact_rollback": 0,
+            "tup_fetched": 20921,
+            "tup_updated": 12422,
+            "tup_inserted": 6200,
+            "blks_hit": 303714,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.36
+          },
+          "notes": []
+        },
+        {
+          "config": {
+            "workers": 1,
+            "jobs_per_worker": 0,
+            "min_jobs": 6200,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w1-r2",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 6200,
+          "completed": 6200,
+          "wall_seconds": 11.384,
+          "interior_throughput": 619.8,
+          "wallclock_throughput": 544.6,
+          "interior_window_seconds": 8.003,
+          "interior_jobs": 4960,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 0.893,
+            "p95": 1.216,
+            "p99": 1.549
+          },
+          "ack_latency_ms": {
+            "p50": 0.815,
+            "p95": 1.137,
+            "p99": 1.378
+          },
+          "e2e_latency_ms": {
+            "p50": 6439.409,
+            "p95": 11012.933,
+            "p99": 11471.852
+          },
+          "worker_stats": {
+            "processed": 6200,
+            "empty_claims": 1,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 1948,
+            "active_backend_observations": 1234,
+            "wait_events": [
+              {
+                "event": "IO/WALSync",
+                "observations": 1015,
+                "share": 0.8225
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 215,
+                "share": 0.1742
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 2,
+                "share": 0.0016
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 2,
+                "share": 0.0016
+              }
+            ],
+            "backend_states": {
+              "idle": 2118,
+              "active": 1234,
+              "idle in transaction": 526
+            },
+            "ungranted_lock_observations": 0
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.0276,
+            "host_cpu_busy_cores_equivalent": 0.66,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 14580,
+            "xact_rollback": 0,
+            "tup_fetched": 20087,
+            "tup_updated": 12408,
+            "tup_inserted": 6200,
+            "blks_hit": 335902,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.35
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "workers": 2,
+      "jobs_per_run": 11742,
+      "reps": 3,
+      "throughput_median": 981.1,
+      "throughput_min": 975.7,
+      "throughput_max": 1111.1,
+      "runs": [
+        {
+          "config": {
+            "workers": 2,
+            "jobs_per_worker": 0,
+            "min_jobs": 11742,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w2-r0",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 11742,
+          "completed": 11742,
+          "wall_seconds": 12.093,
+          "interior_throughput": 981.1,
+          "wallclock_throughput": 971.0,
+          "interior_window_seconds": 9.574,
+          "interior_jobs": 9393,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 0.97,
+            "p95": 1.487,
+            "p99": 1.687
+          },
+          "ack_latency_ms": {
+            "p50": 0.934,
+            "p95": 1.463,
+            "p99": 1.638
+          },
+          "e2e_latency_ms": {
+            "p50": 7360.067,
+            "p95": 12725.481,
+            "p99": 13210.477
+          },
+          "worker_stats": {
+            "processed": 11742,
+            "empty_claims": 4,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2064,
+            "active_backend_observations": 2722,
+            "wait_events": [
+              {
+                "event": "IO/WALSync",
+                "observations": 1937,
+                "share": 0.7116
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 478,
+                "share": 0.1756
+              },
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 287,
+                "share": 0.1054
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 18,
+                "share": 0.0066
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 2,
+                "share": 0.0007
+              }
+            ],
+            "backend_states": {
+              "idle": 2463,
+              "active": 2722,
+              "idle in transaction": 973
+            },
+            "ungranted_lock_observations": 0
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.046,
+            "host_cpu_busy_cores_equivalent": 1.1,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 25784,
+            "xact_rollback": 0,
+            "tup_fetched": 48948,
+            "tup_updated": 23492,
+            "tup_inserted": 11742,
+            "blks_hit": 757690,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.2
+          },
+          "notes": []
+        },
+        {
+          "config": {
+            "workers": 2,
+            "jobs_per_worker": 0,
+            "min_jobs": 11742,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w2-r1",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 11742,
+          "completed": 11742,
+          "wall_seconds": 12.102,
+          "interior_throughput": 1111.1,
+          "wallclock_throughput": 970.2,
+          "interior_window_seconds": 8.453,
+          "interior_jobs": 9393,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 0.967,
+            "p95": 1.495,
+            "p99": 1.683
+          },
+          "ack_latency_ms": {
+            "p50": 0.933,
+            "p95": 1.471,
+            "p99": 1.659
+          },
+          "e2e_latency_ms": {
+            "p50": 6369.054,
+            "p95": 11632.067,
+            "p99": 12108.773
+          },
+          "worker_stats": {
+            "processed": 11742,
+            "empty_claims": 4,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2086,
+            "active_backend_observations": 2758,
+            "wait_events": [
+              {
+                "event": "IO/WALSync",
+                "observations": 1989,
+                "share": 0.7212
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 449,
+                "share": 0.1628
+              },
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 312,
+                "share": 0.1131
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 7,
+                "share": 0.0025
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 1,
+                "share": 0.0004
+              }
+            ],
+            "backend_states": {
+              "idle": 2469,
+              "active": 2758,
+              "idle in transaction": 995
+            },
+            "ungranted_lock_observations": 0
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.0453,
+            "host_cpu_busy_cores_equivalent": 1.09,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 25807,
+            "xact_rollback": 0,
+            "tup_fetched": 48933,
+            "tup_updated": 23492,
+            "tup_inserted": 11742,
+            "blks_hit": 758279,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.2
+          },
+          "notes": []
+        },
+        {
+          "config": {
+            "workers": 2,
+            "jobs_per_worker": 0,
+            "min_jobs": 11742,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w2-r2",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 11742,
+          "completed": 11742,
+          "wall_seconds": 12.119,
+          "interior_throughput": 975.7,
+          "wallclock_throughput": 968.9,
+          "interior_window_seconds": 9.627,
+          "interior_jobs": 9393,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 0.975,
+            "p95": 1.511,
+            "p99": 1.68
+          },
+          "ack_latency_ms": {
+            "p50": 0.943,
+            "p95": 1.484,
+            "p99": 1.616
+          },
+          "e2e_latency_ms": {
+            "p50": 7368.035,
+            "p95": 12790.295,
+            "p99": 13271.191
+          },
+          "worker_stats": {
+            "processed": 11742,
+            "empty_claims": 2,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2065,
+            "active_backend_observations": 3573,
+            "wait_events": [
+              {
+                "event": "IO/WALSync",
+                "observations": 1978,
+                "share": 0.5536
+              },
+              {
+                "event": "Timeout/VacuumTruncate",
+                "observations": 852,
+                "share": 0.2385
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 434,
+                "share": 0.1215
+              },
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 295,
+                "share": 0.0826
+              },
+              {
+                "event": "Timeout/VacuumDelay",
+                "observations": 6,
+                "share": 0.0017
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 4,
+                "share": 0.0011
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 4,
+                "share": 0.0011
+              }
+            ],
+            "backend_states": {
+              "idle": 2462,
+              "idle in transaction": 991,
+              "active": 3573
+            },
+            "ungranted_lock_observations": 0
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.0464,
+            "host_cpu_busy_cores_equivalent": 1.11,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 25789,
+            "xact_rollback": 0,
+            "tup_fetched": 50735,
+            "tup_updated": 23539,
+            "tup_inserted": 11742,
+            "blks_hit": 640306,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.2
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "workers": 4,
+      "jobs_per_run": 20218,
+      "reps": 3,
+      "throughput_median": 1858.1,
+      "throughput_min": 1652.1,
+      "throughput_max": 1912.0,
+      "runs": [
+        {
+          "config": {
+            "workers": 4,
+            "jobs_per_worker": 0,
+            "min_jobs": 20218,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w4-r0",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 20218,
+          "completed": 20218,
+          "wall_seconds": 12.089,
+          "interior_throughput": 1912.0,
+          "wallclock_throughput": 1672.5,
+          "interior_window_seconds": 8.46,
+          "interior_jobs": 16175,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 1.333,
+            "p95": 1.638,
+            "p99": 2.075
+          },
+          "ack_latency_ms": {
+            "p50": 0.979,
+            "p95": 1.539,
+            "p99": 1.883
+          },
+          "e2e_latency_ms": {
+            "p50": 6385.859,
+            "p95": 11670.535,
+            "p99": 12155.551
+          },
+          "worker_stats": {
+            "processed": 20218,
+            "empty_claims": 8,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2092,
+            "active_backend_observations": 5792,
+            "wait_events": [
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 2914,
+                "share": 0.5031
+              },
+              {
+                "event": "IO/WALSync",
+                "observations": 1976,
+                "share": 0.3412
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 777,
+                "share": 0.1342
+              },
+              {
+                "event": "LWLock/BufferContent",
+                "observations": 58,
+                "share": 0.01
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 57,
+                "share": 0.0098
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 9,
+                "share": 0.0016
+              },
+              {
+                "event": "Lock/transactionid",
+                "observations": 1,
+                "share": 0.0002
+              }
+            ],
+            "backend_states": {
+              "idle": 2764,
+              "active": 5792,
+              "idle in transaction": 1833
+            },
+            "ungranted_lock_observations": 2
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.0735,
+            "host_cpu_busy_cores_equivalent": 1.76,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 42771,
+            "xact_rollback": 0,
+            "tup_fetched": 119251,
+            "tup_updated": 40444,
+            "tup_inserted": 20218,
+            "blks_hit": 1670475,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.12
+          },
+          "notes": []
+        },
+        {
+          "config": {
+            "workers": 4,
+            "jobs_per_worker": 0,
+            "min_jobs": 20218,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w4-r1",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 20218,
+          "completed": 20218,
+          "wall_seconds": 12.411,
+          "interior_throughput": 1652.1,
+          "wallclock_throughput": 1629.0,
+          "interior_window_seconds": 9.791,
+          "interior_jobs": 16175,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 1.356,
+            "p95": 1.693,
+            "p99": 2.211
+          },
+          "ack_latency_ms": {
+            "p50": 0.998,
+            "p95": 1.571,
+            "p99": 2.083
+          },
+          "e2e_latency_ms": {
+            "p50": 7512.553,
+            "p95": 13055.292,
+            "p99": 13548.147
+          },
+          "worker_stats": {
+            "processed": 20218,
+            "empty_claims": 12,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2109,
+            "active_backend_observations": 5802,
+            "wait_events": [
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 2938,
+                "share": 0.5064
+              },
+              {
+                "event": "IO/WALSync",
+                "observations": 1986,
+                "share": 0.3423
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 766,
+                "share": 0.132
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 56,
+                "share": 0.0097
+              },
+              {
+                "event": "LWLock/BufferContent",
+                "observations": 41,
+                "share": 0.0071
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 13,
+                "share": 0.0022
+              },
+              {
+                "event": "Lock/transactionid",
+                "observations": 2,
+                "share": 0.0003
+              }
+            ],
+            "backend_states": {
+              "idle": 2879,
+              "active": 5802,
+              "idle in transaction": 1792
+            },
+            "ungranted_lock_observations": 3
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.072,
+            "host_cpu_busy_cores_equivalent": 1.73,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 42811,
+            "xact_rollback": 0,
+            "tup_fetched": 119178,
+            "tup_updated": 40444,
+            "tup_inserted": 20218,
+            "blks_hit": 1680323,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.12
+          },
+          "notes": []
+        },
+        {
+          "config": {
+            "workers": 4,
+            "jobs_per_worker": 0,
+            "min_jobs": 20218,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w4-r2",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 20218,
+          "completed": 20218,
+          "wall_seconds": 12.252,
+          "interior_throughput": 1858.1,
+          "wallclock_throughput": 1650.2,
+          "interior_window_seconds": 8.705,
+          "interior_jobs": 16175,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 1.287,
+            "p95": 1.672,
+            "p99": 2.087
+          },
+          "ack_latency_ms": {
+            "p50": 0.999,
+            "p95": 1.565,
+            "p99": 1.942
+          },
+          "e2e_latency_ms": {
+            "p50": 7459.585,
+            "p95": 11929.667,
+            "p99": 12402.251
+          },
+          "worker_stats": {
+            "processed": 20218,
+            "empty_claims": 8,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2105,
+            "active_backend_observations": 5889,
+            "wait_events": [
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 2989,
+                "share": 0.5076
+              },
+              {
+                "event": "IO/WALSync",
+                "observations": 1988,
+                "share": 0.3376
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 821,
+                "share": 0.1394
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 45,
+                "share": 0.0076
+              },
+              {
+                "event": "LWLock/BufferContent",
+                "observations": 34,
+                "share": 0.0058
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 11,
+                "share": 0.0019
+              },
+              {
+                "event": "IO/DataFileExtend",
+                "observations": 1,
+                "share": 0.0002
+              }
+            ],
+            "backend_states": {
+              "idle": 2743,
+              "active": 5889,
+              "idle in transaction": 1825,
+              "unknown": 1
+            },
+            "ungranted_lock_observations": 0
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.0706,
+            "host_cpu_busy_cores_equivalent": 1.7,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 42783,
+            "xact_rollback": 0,
+            "tup_fetched": 119742,
+            "tup_updated": 40444,
+            "tup_inserted": 20218,
+            "blks_hit": 1669934,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.12
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "workers": 8,
+      "jobs_per_run": 33255,
+      "reps": 3,
+      "throughput_median": 2827.8,
+      "throughput_min": 2804.9,
+      "throughput_max": 3166.0,
+      "runs": [
+        {
+          "config": {
+            "workers": 8,
+            "jobs_per_worker": 0,
+            "min_jobs": 33255,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w8-r0",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 33255,
+          "completed": 33255,
+          "wall_seconds": 12.027,
+          "interior_throughput": 2804.9,
+          "wallclock_throughput": 2765.0,
+          "interior_window_seconds": 9.485,
+          "interior_jobs": 26604,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 1.551,
+            "p95": 1.897,
+            "p99": 2.194
+          },
+          "ack_latency_ms": {
+            "p50": 1.333,
+            "p95": 1.807,
+            "p99": 2.238
+          },
+          "e2e_latency_ms": {
+            "p50": 7380.026,
+            "p95": 12773.028,
+            "p99": 13253.394
+          },
+          "worker_stats": {
+            "processed": 33255,
+            "empty_claims": 16,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2018,
+            "active_backend_observations": 11217,
+            "wait_events": [
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 7551,
+                "share": 0.6732
+              },
+              {
+                "event": "IO/WALSync",
+                "observations": 1864,
+                "share": 0.1662
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 1331,
+                "share": 0.1187
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 215,
+                "share": 0.0192
+              },
+              {
+                "event": "LWLock/BufferContent",
+                "observations": 181,
+                "share": 0.0161
+              },
+              {
+                "event": "Lock/transactionid",
+                "observations": 55,
+                "share": 0.0049
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 13,
+                "share": 0.0012
+              },
+              {
+                "event": "Timeout/VacuumDelay",
+                "observations": 4,
+                "share": 0.0004
+              },
+              {
+                "event": "LWLock/WALBufMapping",
+                "observations": 1,
+                "share": 0.0001
+              },
+              {
+                "event": "IO/DataFileExtend",
+                "observations": 1,
+                "share": 0.0001
+              },
+              {
+                "event": "LWLock/LockManager",
+                "observations": 1,
+                "share": 0.0001
+              }
+            ],
+            "backend_states": {
+              "idle": 3501,
+              "unknown": 2,
+              "active": 11217,
+              "idle in transaction": 3334
+            },
+            "ungranted_lock_observations": 49
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.1248,
+            "host_cpu_busy_cores_equivalent": 2.99,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 68785,
+            "xact_rollback": 0,
+            "tup_fetched": 200481,
+            "tup_updated": 66532,
+            "tup_inserted": 33255,
+            "blks_hit": 3567183,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.07
+          },
+          "notes": []
+        },
+        {
+          "config": {
+            "workers": 8,
+            "jobs_per_worker": 0,
+            "min_jobs": 33255,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w8-r1",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 33255,
+          "completed": 33255,
+          "wall_seconds": 11.839,
+          "interior_throughput": 3166.0,
+          "wallclock_throughput": 2809.0,
+          "interior_window_seconds": 8.403,
+          "interior_jobs": 26604,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 1.524,
+            "p95": 1.863,
+            "p99": 2.212
+          },
+          "ack_latency_ms": {
+            "p50": 1.358,
+            "p95": 1.773,
+            "p99": 2.173
+          },
+          "e2e_latency_ms": {
+            "p50": 7110.178,
+            "p95": 11640.523,
+            "p99": 12120.045
+          },
+          "worker_stats": {
+            "processed": 33255,
+            "empty_claims": 8,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2013,
+            "active_backend_observations": 11130,
+            "wait_events": [
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 7490,
+                "share": 0.673
+              },
+              {
+                "event": "IO/WALSync",
+                "observations": 1855,
+                "share": 0.1667
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 1319,
+                "share": 0.1185
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 218,
+                "share": 0.0196
+              },
+              {
+                "event": "LWLock/BufferContent",
+                "observations": 179,
+                "share": 0.0161
+              },
+              {
+                "event": "Lock/transactionid",
+                "observations": 56,
+                "share": 0.005
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 9,
+                "share": 0.0008
+              },
+              {
+                "event": "IPC/XactGroupUpdate",
+                "observations": 1,
+                "share": 0.0001
+              },
+              {
+                "event": "IO/SLRUWrite",
+                "observations": 1,
+                "share": 0.0001
+              },
+              {
+                "event": "LWLock/LockManager",
+                "observations": 1,
+                "share": 0.0001
+              },
+              {
+                "event": "IO/DataFileExtend",
+                "observations": 1,
+                "share": 0.0001
+              }
+            ],
+            "backend_states": {
+              "idle": 3356,
+              "active": 11130,
+              "idle in transaction": 3449
+            },
+            "ungranted_lock_observations": 56
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.1268,
+            "host_cpu_busy_cores_equivalent": 3.04,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 68764,
+            "xact_rollback": 0,
+            "tup_fetched": 198162,
+            "tup_updated": 66518,
+            "tup_inserted": 33255,
+            "blks_hit": 3745731,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.07
+          },
+          "notes": []
+        },
+        {
+          "config": {
+            "workers": 8,
+            "jobs_per_worker": 0,
+            "min_jobs": 33255,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w8-r2",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 33255,
+          "completed": 33255,
+          "wall_seconds": 11.882,
+          "interior_throughput": 2827.8,
+          "wallclock_throughput": 2798.7,
+          "interior_window_seconds": 9.408,
+          "interior_jobs": 26604,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 1.528,
+            "p95": 1.852,
+            "p99": 2.182
+          },
+          "ack_latency_ms": {
+            "p50": 1.356,
+            "p95": 1.78,
+            "p99": 2.19
+          },
+          "e2e_latency_ms": {
+            "p50": 7347.176,
+            "p95": 12660.801,
+            "p99": 13128.533
+          },
+          "worker_stats": {
+            "processed": 33255,
+            "empty_claims": 8,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2001,
+            "active_backend_observations": 11113,
+            "wait_events": [
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 7398,
+                "share": 0.6657
+              },
+              {
+                "event": "IO/WALSync",
+                "observations": 1821,
+                "share": 0.1639
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 1412,
+                "share": 0.1271
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 212,
+                "share": 0.0191
+              },
+              {
+                "event": "LWLock/BufferContent",
+                "observations": 206,
+                "share": 0.0185
+              },
+              {
+                "event": "Lock/transactionid",
+                "observations": 46,
+                "share": 0.0041
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 15,
+                "share": 0.0013
+              },
+              {
+                "event": "LWLock/XactSLRU",
+                "observations": 2,
+                "share": 0.0002
+              },
+              {
+                "event": "LWLock/LockManager",
+                "observations": 1,
+                "share": 0.0001
+              }
+            ],
+            "backend_states": {
+              "idle": 3396,
+              "active": 11113,
+              "idle in transaction": 3355
+            },
+            "ungranted_lock_observations": 45
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.1294,
+            "host_cpu_busy_cores_equivalent": 3.1,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 68753,
+            "xact_rollback": 0,
+            "tup_fetched": 198285,
+            "tup_updated": 66518,
+            "tup_inserted": 33255,
+            "blks_hit": 3746592,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.07
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "workers": 16,
+      "jobs_per_run": 52904,
+      "reps": 3,
+      "throughput_median": 4732.8,
+      "throughput_min": 4202.0,
+      "throughput_max": 4775.0,
+      "runs": [
+        {
+          "config": {
+            "workers": 16,
+            "jobs_per_worker": 0,
+            "min_jobs": 52904,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w16-r0",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 52904,
+          "completed": 52904,
+          "wall_seconds": 12.671,
+          "interior_throughput": 4732.8,
+          "wallclock_throughput": 4175.2,
+          "interior_window_seconds": 8.942,
+          "interior_jobs": 42323,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 1.821,
+            "p95": 2.528,
+            "p99": 2.919
+          },
+          "ack_latency_ms": {
+            "p50": 1.743,
+            "p95": 2.711,
+            "p99": 3.31
+          },
+          "e2e_latency_ms": {
+            "p50": 7269.977,
+            "p95": 12421.36,
+            "p99": 12935.465
+          },
+          "worker_stats": {
+            "processed": 52904,
+            "empty_claims": 32,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2038,
+            "active_backend_observations": 21991,
+            "wait_events": [
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 15493,
+                "share": 0.7045
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 2488,
+                "share": 0.1131
+              },
+              {
+                "event": "IO/WALSync",
+                "observations": 1814,
+                "share": 0.0825
+              },
+              {
+                "event": "Lock/transactionid",
+                "observations": 1145,
+                "share": 0.0521
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 608,
+                "share": 0.0276
+              },
+              {
+                "event": "LWLock/BufferContent",
+                "observations": 368,
+                "share": 0.0167
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 32,
+                "share": 0.0015
+              },
+              {
+                "event": "LWLock/LockManager",
+                "observations": 32,
+                "share": 0.0015
+              },
+              {
+                "event": "Timeout/SpinDelay",
+                "observations": 7,
+                "share": 0.0003
+              },
+              {
+                "event": "IO/DataFileExtend",
+                "observations": 2,
+                "share": 0.0001
+              },
+              {
+                "event": "LWLock/WALInsert",
+                "observations": 1,
+                "share": 0.0
+              },
+              {
+                "event": "LWLock/XactSLRU",
+                "observations": 1,
+                "share": 0.0
+              }
+            ],
+            "backend_states": {
+              "idle": 5111,
+              "active": 21991,
+              "idle in transaction": 6990,
+              "unknown": 1
+            },
+            "ungranted_lock_observations": 1186
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.246,
+            "host_cpu_busy_cores_equivalent": 5.9,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 108133,
+            "xact_rollback": 0,
+            "tup_fetched": 495169,
+            "tup_updated": 105816,
+            "tup_inserted": 52904,
+            "blks_hit": 8228442,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.04
+          },
+          "notes": []
+        },
+        {
+          "config": {
+            "workers": 16,
+            "jobs_per_worker": 0,
+            "min_jobs": 52904,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w16-r1",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 52904,
+          "completed": 52904,
+          "wall_seconds": 12.789,
+          "interior_throughput": 4202.0,
+          "wallclock_throughput": 4136.5,
+          "interior_window_seconds": 10.072,
+          "interior_jobs": 42323,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 1.837,
+            "p95": 2.53,
+            "p99": 2.9
+          },
+          "ack_latency_ms": {
+            "p50": 1.759,
+            "p95": 2.719,
+            "p99": 3.292
+          },
+          "e2e_latency_ms": {
+            "p50": 7867.438,
+            "p95": 13604.706,
+            "p99": 14110.351
+          },
+          "worker_stats": {
+            "processed": 52904,
+            "empty_claims": 32,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2041,
+            "active_backend_observations": 22177,
+            "wait_events": [
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 15692,
+                "share": 0.7076
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 2392,
+                "share": 0.1079
+              },
+              {
+                "event": "IO/WALSync",
+                "observations": 1865,
+                "share": 0.0841
+              },
+              {
+                "event": "Lock/transactionid",
+                "observations": 1255,
+                "share": 0.0566
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 583,
+                "share": 0.0263
+              },
+              {
+                "event": "LWLock/BufferContent",
+                "observations": 335,
+                "share": 0.0151
+              },
+              {
+                "event": "LWLock/LockManager",
+                "observations": 23,
+                "share": 0.001
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 22,
+                "share": 0.001
+              },
+              {
+                "event": "Timeout/SpinDelay",
+                "observations": 6,
+                "share": 0.0003
+              },
+              {
+                "event": "IO/DataFileExtend",
+                "observations": 3,
+                "share": 0.0001
+              },
+              {
+                "event": "IPC/XactGroupUpdate",
+                "observations": 1,
+                "share": 0.0
+              }
+            ],
+            "backend_states": {
+              "idle": 5103,
+              "active": 22177,
+              "idle in transaction": 7031,
+              "unknown": 1
+            },
+            "ungranted_lock_observations": 1286
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.2465,
+            "host_cpu_busy_cores_equivalent": 5.92,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 108140,
+            "xact_rollback": 0,
+            "tup_fetched": 959790,
+            "tup_updated": 105830,
+            "tup_inserted": 52904,
+            "blks_hit": 8567486,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.04
+          },
+          "notes": []
+        },
+        {
+          "config": {
+            "workers": 16,
+            "jobs_per_worker": 0,
+            "min_jobs": 52904,
+            "handler_sleep": 0.0,
+            "heartbeat_interval": 0.0,
+            "visibility_timeout": 30.0,
+            "sync_commit": "on",
+            "poll_interval": 0.02,
+            "timeout": 300.0,
+            "real_worker": false,
+            "label": "sweep-w16-r2",
+            "dsn": "postgresql://conveyor:conveyor@localhost:5433/conveyor"
+          },
+          "jobs": 52904,
+          "completed": 52904,
+          "wall_seconds": 12.633,
+          "interior_throughput": 4775.0,
+          "wallclock_throughput": 4187.9,
+          "interior_window_seconds": 8.863,
+          "interior_jobs": 42323,
+          "achieved_arrival_rate": null,
+          "claim_latency_ms": {
+            "p50": 1.814,
+            "p95": 2.523,
+            "p99": 2.925
+          },
+          "ack_latency_ms": {
+            "p50": 1.735,
+            "p95": 2.695,
+            "p99": 3.248
+          },
+          "e2e_latency_ms": {
+            "p50": 7735.824,
+            "p95": 12364.883,
+            "p99": 12877.678
+          },
+          "worker_stats": {
+            "processed": 52904,
+            "empty_claims": 16,
+            "extends": 0,
+            "lease_lost": 0,
+            "ack_rejected": 0
+          },
+          "waits": {
+            "samples": 2020,
+            "active_backend_observations": 21507,
+            "wait_events": [
+              {
+                "event": "LWLock/WALWrite",
+                "observations": 14867,
+                "share": 0.6913
+              },
+              {
+                "event": "CPU (running, no wait)",
+                "observations": 2513,
+                "share": 0.1168
+              },
+              {
+                "event": "IO/WALSync",
+                "observations": 1826,
+                "share": 0.0849
+              },
+              {
+                "event": "Lock/transactionid",
+                "observations": 1246,
+                "share": 0.0579
+              },
+              {
+                "event": "Client/ClientRead",
+                "observations": 620,
+                "share": 0.0288
+              },
+              {
+                "event": "LWLock/BufferContent",
+                "observations": 366,
+                "share": 0.017
+              },
+              {
+                "event": "LWLock/LockManager",
+                "observations": 31,
+                "share": 0.0014
+              },
+              {
+                "event": "IO/WALWrite",
+                "observations": 20,
+                "share": 0.0009
+              },
+              {
+                "event": "LWLock/WALInsert",
+                "observations": 10,
+                "share": 0.0005
+              },
+              {
+                "event": "IO/DataFileExtend",
+                "observations": 4,
+                "share": 0.0002
+              },
+              {
+                "event": "Timeout/SpinDelay",
+                "observations": 2,
+                "share": 0.0001
+              },
+              {
+                "event": "LWLock/XactSLRU",
+                "observations": 2,
+                "share": 0.0001
+              }
+            ],
+            "backend_states": {
+              "idle": 5192,
+              "idle in transaction": 7107,
+              "active": 21507,
+              "unknown": 2
+            },
+            "ungranted_lock_observations": 1211
+          },
+          "cpu": {
+            "host_cpu_busy_fraction": 0.2526,
+            "host_cpu_busy_cores_equivalent": 6.06,
+            "cores": 24
+          },
+          "db": {
+            "xact_commit": 108098,
+            "xact_rollback": 0,
+            "tup_fetched": 963684,
+            "tup_updated": 105816,
+            "tup_inserted": 52904,
+            "blks_hit": 8562038,
+            "blks_read": 4,
+            "deadlocks": 0,
+            "commits_per_job": 2.04
+          },
+          "notes": []
+        }
+      ]
+    }
+  ]
+}
