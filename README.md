@@ -23,6 +23,7 @@ handler name in a small envelope alongside your payload, so unwrap it at the bou
 def send_welcome(payload):
     print("welcome", payload["user_id"])
 
+
 # `python -m conveyor.worker --handler myapp.handlers:entrypoint`
 def entrypoint(job):
     send_welcome(job.payload["payload"])
