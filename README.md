@@ -143,6 +143,12 @@ every number links to the file that produced it. Read the caveat before the numb
 Full detail, collected automatically rather than hand-written, is in
 [`bench/reports/environment.md`](bench/reports/environment.md).
 
+**That file is rewritten by every run and carries no run stamp**, so it describes whichever
+run finished last — currently the 2026-09-10 commit probe. It is not the provenance for any
+particular number above. Each `results-*.json` embeds its own `environment` block, captured
+during that run, and that is the one to read when checking what a specific figure was
+measured on.
+
 **These numbers do not transfer to your machine.** The database is stock, untuned, running on
 WSL2's virtual disk, sharing the same 24 cores with the workers driving it, and talking to
 them over loopback — so no latency below includes a network hop, and `fsync` latency is not
@@ -151,23 +157,77 @@ these as the *shape* of the system's behaviour, not as a score.
 
 ### Throughput and scaling
 
-Run `20260907T084259Z`, no-op handler, draining a pre-filled queue. Each point is sized by a
-pilot run to last about 12 seconds, then measured three times; throughput is counted over the
-middle 80% of completions so ramp-up and drain are excluded. Run-to-run spread is under 2%
-everywhere. Source: [scaling table](bench/reports/README.md#scaling), raw samples in
-[`results-20260907T084259Z.json`](bench/reports/results-20260907T084259Z.json).
+No-op handler, draining a pre-filled queue. Each point is sized by a pilot run to last about
+12 seconds, then measured three times; throughput is counted over the middle 80% of
+completions so ramp-up and drain are excluded.
+
+**The load test was run twice, three days apart, on the same machine and the same
+configuration — and both runs are reported here.** Replacing the first with the second would
+throw away what the second run actually established: how far this measurement moves between
+sittings.
+
+| Workers | 2026-09-07 median | range | 2026-09-10 median | range | Δ median |
+|---|---|---|---|---|---|
+| 1 | 557 | 553–559 | 609 | 544–620 | +9.2% |
+| 2 | 966 | 952–1,002 | 981 | 976–1,111 | +1.6% |
+| 4 | 1,664 | 1,653–1,682 | 1,858 | 1,652–1,912 | +11.7% |
+| 8 | 2,777 | 2,765–2,814 | 2,828 | 2,805–3,166 | +1.8% |
+| **16** | **4,210** | 4,130–4,223 | **4,733** | 4,202–4,775 | **+12.4%** |
+
+Sources: [scaling table](bench/reports/README.md#scaling) and
+[`results-20260907T084259Z.json`](bench/reports/results-20260907T084259Z.json) for the first
+run, [`results-20260910T035732Z.json`](bench/reports/results-20260910T035732Z.json) for the
+second.
+
+Three things to read off the pair:
+
+- **The medians differ by up to 12%, but every worker count's ranges overlap.** At 16 workers
+  the first run spans 4,130–4,223 and the second 4,202–4,775, meeting in 4,202–4,223. The gap
+  between medians is wider than either run's own spread would lead you to expect.
+- **The second run was about six times noisier.** Intra-run spread (max − min over the
+  median) was 1.1–5.2% on 2026-09-07 and 12.1–14.0% on 2026-09-10, at every worker count,
+  with nothing changed in the harness, the database or the machine. An earlier version of
+  this section claimed spread was "under 2% everywhere"; that was wrong even for the first
+  run, whose 2-worker point spread 5.2%.
+- **What reproduced is the shape, not the number.** Efficiency at 16 workers was 47% then and
+  49% now; speedup 7.55× and 7.77×. Quote the curve. A single throughput figure from this
+  benchmark carries roughly ±12% of run-to-run slack on this machine, and any comparison
+  smaller than that is noise.
+
+Per-run detail for the second run, alongside its own commit probe
+([`results-20260910T040144Z.json`](bench/reports/results-20260910T040144Z.json)):
 
 | Workers | Jobs/s (median of 3) | Range | Speedup | Efficiency | Commit ceiling | % of ceiling | Host CPU |
 |---|---|---|---|---|---|---|---|
-| 1 | 557 | 553–559 | 1.00× | 100% | 605 | 92% | 0.7 cores |
-| 2 | 966 | 952–1,002 | 1.73× | 87% | 997 | 97% | 1.2 cores |
-| 4 | 1,664 | 1,653–1,682 | 2.99× | 75% | 1,979 | 84% | 1.9 cores |
-| 8 | 2,777 | 2,765–2,814 | 4.98× | 62% | 3,315 | 84% | 3.4 cores |
-| **16** | **4,210** | 4,130–4,223 | **7.55×** | **47%** | 4,716 | 89% | 6.5 cores |
+| 1 | 609 | 544–620 | 1.00× | 100% | 602 | 101% | 0.6 cores |
+| 2 | 981 | 976–1,111 | 1.61× | 81% | 975 | 101% | 1.1 cores |
+| 4 | 1,858 | 1,652–1,912 | 3.05× | 76% | 1,917 | 97% | 1.7 cores |
+| 8 | 2,828 | 2,805–3,166 | 4.64× | 58% | 3,405 | 83% | 3.0 cores |
+| **16** | **4,733** | 4,202–4,775 | **7.77×** | **49%** | 4,858 | 97% | 5.9 cores |
 
-Scaling degrades continuously rather than hitting a wall: efficiency falls from 87% at two
-workers to 47% at sixteen. Enqueue on the product path runs at
-[1,059/s on one connection, p50 0.887 ms](bench/reports/README.md#headline).
+The commit-ceiling relationship held: the queue sustained 83–101% of the pure-commit ceiling,
+against 84–97% in the first run. Two points read just over 100% because the sweep and the
+probe are separate runs four minutes apart, not two halves of one — at this noise level a
+ratio of two independent runs can cross 1.0, and rounding it down to 100% would be tidying.
+
+The first run's equivalent table is in
+[scaling](bench/reports/README.md#scaling); its 16-worker point is 4,210 jobs/s at 47%
+efficiency and 89% of a 4,716/s ceiling, on 6.5 cores.
+
+Scaling degrades continuously rather than hitting a wall in both runs: efficiency falls from
+87% (81% in the second run) at two workers to 47–49% at sixteen. Enqueue on the product path
+runs at [1,059/s on one connection, p50 0.887 ms](bench/reports/README.md#headline).
+
+**The sweep measures the queue, not a full worker process.** Every point above runs with
+`real_worker: false` — the driver is `bench/worker.py`, a loop that mirrors
+`Worker.run_once` so it can time claim and ack separately, which the product class does not
+expose. It is not the shipped worker, so these figures exclude whatever a real worker process
+costs beyond the claim/ack path. The size of that gap was measured rather than assumed: the
+same configuration run through the unmodified `python -m conveyor.worker`, counting
+completions from the database, gave 4,184 jobs/s against the bench loop's 4,185 — a 0.0%
+difference, inside the run-to-run spread above
+([instrument check](bench/reports/README.md#is-the-measuring-instrument-honest)). The chaos
+tests, by contrast, drive real worker subprocesses throughout.
 
 Claim and ack latency stays flat as workers are added, which is what a healthy claim path looks
 like — the system slows by doing fewer commits per second, not by making any single claim wait
@@ -239,14 +299,17 @@ and empty claims stay in the tens across runs of tens of thousands of jobs.
 
 ### Sustained arrival is about half of drain capacity
 
-The 4,210 jobs/s headline is a *drain* number: a pre-filled queue emptied as fast as possible,
+This section is all from the 2026-09-07 run, which is the one that carries a steady-state
+block; the 2026-09-10 reproduction covered the sweep and the commit probe only.
+
+The 4,210 jobs/s drain figure is exactly that — a *drain* number: a pre-filled queue emptied as fast as possible,
 costing two commits per job (claim, ack). A system in steady state costs **three**, because
 something has to enqueue as well, and those producers compete with the workers for the same WAL
 and the same cores. This is the distinction that makes a drain benchmark misleading if quoted
 alone.
 
 The commit ceiling divided by three predicts about 3,144 jobs/s. The highest arrival rate
-actually achieved was **2,228 jobs/s**, against a drain capacity of 4,210
+actually achieved was **2,228 jobs/s**, against that run's drain capacity of 4,210
 ([end-to-end latency](bench/reports/README.md#latency)):
 
 | Load | Target arrival/s | Achieved arrival/s | e2e p50 | e2e p95 | e2e p99 |
